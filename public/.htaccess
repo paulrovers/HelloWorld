@@ -1,0 +1,20 @@
+RewriteEngine On
+
+## stop when requesting these directories#
+RewriteCond %{REQUEST_URI} "/images/" [OR]
+RewriteCond %{REQUEST_URI} "/css/" [OR]
+RewriteCond %{REQUEST_URI} "/Static/" [OR]
+RewriteCond %{REQUEST_URI} "/js/"
+RewriteRule (.*) $1 [L]
+######
+
+RewriteCond %{THE_REQUEST} ^.*/index\.php
+RewriteRule ^(.*)index.php$ /$1 [R=301,L]
+
+# Remove the question mark from the request but maintain the query string
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?$1 [L,QSA]
+
+ErrorDocument 404 /error/

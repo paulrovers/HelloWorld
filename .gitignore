@@ -1,0 +1,6 @@
+.env
+*.log
+.idea/
+/storage/cache/*/*
+/storage/temp/*/*
+vendor/
