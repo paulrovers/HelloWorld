@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact formulier ontvangen</title>
+</head>
+<body>
+<h1>Contact formulier ontvangen</h1>
+<p>
+Er is een contact formulier ingevuld met de volgende gegevens:
+<br><br>
+{% if form %}
+<ul>
+    {% for field, value in form %}
+        <li>{{ field }} : {{ value }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<br><br>
+Ontvangen van:
+<br>
+Website Traudi Rovers
+</p>
+</body>
+</html>

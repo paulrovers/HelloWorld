@@ -48,28 +48,6 @@ class login extends Controller
         $this->loadTemplate('login.twig', $array);
     }
 
-    /*
-    public function loginAction()
-    {
-        $user = new users();
-
-        //check if credentials are correct
-        if($user->verify_login($_POST['email'],$_POST['password'])){
-            //login user
-            Admin::login($user->get_user_by_email($_POST['email']));
-            //redirect to admin page
-            header("Location: /admin/home/");
-        }else{
-            //load default template variables
-            $array = [
-                'error' => 'The used credentials are unknown to us.'
-            ];
-
-            //load template based on name used
-            $this->loadTemplate('login.twig', $array);
-        }
-    }*/
-
     public function logoutAction()
     {
         Admin::logout();

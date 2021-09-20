@@ -1,5 +1,8 @@
 RewriteEngine On
 
+#RewriteCond %{http_host} ^hello.com [NC]
+#RewriteRule ^(.*)$ https://www.hello.com/$1 [R=301,L]
+
 ## stop when requesting these directories#
 RewriteCond %{REQUEST_URI} "/images/" [OR]
 RewriteCond %{REQUEST_URI} "/css/" [OR]
