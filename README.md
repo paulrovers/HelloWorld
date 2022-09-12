@@ -7,3 +7,7 @@ Installation:
 3. Edit /public/.htaccess for www redirect if needed
 
 Enjoy your newly created website!
+
+This framework has used several compononent of
+a framework from it trainer Dave Hollingworth
+and can be found at: https://github.com/daveh/php-mvc
