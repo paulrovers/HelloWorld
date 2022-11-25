@@ -2,34 +2,25 @@
 
 namespace core;
 
+use ErrorException;
+
+/**
+ * Error and exception handler
+ */
 class Error
 {
-
     /**
      * Error handler. Convert all errors to Exceptions by throwing an ErrorException.
-     *
-     * @param int $level  Error level
-     * @param string $message  Error message
-     * @param string $file  Filename the error was raised in
-     * @param int $line  Line number in the file
-     *
-     * @return void
      */
-    public static function errorHandler(int $level, string $message, string $file, int $line):void
+    public static function errorHandler(int $level, string $message, string $file, int $line)
     {
-        if (error_reporting() !== 0) {  // to keep the @ operator working
-            throw new \ErrorException($message, 0, $level, $file, $line);
-        }
+        throw new ErrorException($message, 0, $level, $file, $line);
     }
 
     /**
      * Exception handler.
-     *
-     * @param Exception $exception  The exception
-     *
-     * @return void
      */
-    public static function exceptionHandler($exception):void
+    public static function exceptionHandler($exception)
     {
         // Code is 404 (not found) or 500 (general error)
         $code = $exception->getCode();
@@ -38,14 +29,14 @@ class Error
         }
         http_response_code($code);
 
-        if ($_ENV['APP_LIVE_DEBUG'] == 1) {
+        if ($_ENV['SHOW_ERRORS']) {
             echo "<h1>Fatal error</h1>";
             echo "<p>Uncaught exception: '" . get_class($exception) . "'</p>";
             echo "<p>Message: '" . $exception->getMessage() . "'</p>";
             echo "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
             echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
         } else {
-            $log = $_ENV['APP_PATH']. '/storage/logs/' . date('Y-m-d') . '.log';
+            $log = '../Logs/' . date('Y-m-d') . '.txt';
             ini_set('error_log', $log);
 
             $message = "Uncaught exception: '" . get_class($exception) . "'";
@@ -53,20 +44,14 @@ class Error
             $message .= "\nStack trace: " . $exception->getTraceAsString();
             $message .= "\nThrown in '" . $exception->getFile() . "' on line " . $exception->getLine();
 
-            self::SystemFailure($message,true,false);
+            self::SystemFailure($message,true,$_ENV['MAIL_ERRORS']);
         }
     }
 
-    // User error
-    static $strError;
-
     /**
      * Write line to log file
-     * @param string The line to write
-     * @param string The file to write to
-     * @returns boolean
      */
-    static function WriteLogLine(string $strLogLine, string $strLogFileName):bool
+    static function WriteLogLine(string $strLogLine, string $strLogFileName):void
     {
         $resLogFile = fopen($strLogFileName, 'a');
         fwrite($resLogFile, $strLogLine . "\r\n");
@@ -74,29 +59,17 @@ class Error
     }
 
     /**
-     * Show a nice error to user
-     * @param string
-     * @return void
-     */
-    static function UserException ()
-    {
-        die('An error caused the application to quit.');
-    }
-
-    /**
      * Report system failures to administrator(s)
-     * @param string Error message
-     * @param boolean Should it be logged, or just mailed? (optional)
-     * @return boolean
      */
-    static function SystemFailure (string $strErrorMessage, bool $boolLogged = true, bool $boolMail = false):bool
+    static function SystemFailure (string $strErrorMessage, bool $boolLogged = true, bool $boolMail = false):void
     {
         $strLogLine = '[' . date('d-m-Y @ H:i') . ' on ' . $_SERVER["REQUEST_URI"] . '] ' . $strErrorMessage;
 
-        if ($boolLogged)
-            self::WriteLogLine($strLogLine, $_ENV['APP_PATH'].'/storage/logs/failure.log');
-
-        self::UserException();
+        if ($boolLogged){
+            self::WriteLogLine($strLogLine, '../Logs/failure.log');
+        }else{
+            die('Er is een interne fout opgetreden. Een ogenblik geduld a.u.b.');
+        }
     }
 
 }
