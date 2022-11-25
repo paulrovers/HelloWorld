@@ -90,18 +90,11 @@ abstract class Controller
      */
     protected function before()
     {
-        //sanitize data
-        $_GET   = filter_input_array(INPUT_GET, FILTER_SANITIZE_STRING);
-        $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        $_SERVER  = filter_input_array(INPUT_SERVER, FILTER_SANITIZE_STRING);
-        $_COOKIE  = filter_input_array(INPUT_COOKIE, FILTER_SANITIZE_STRING);
-
         if(isset($_SESSION)) {
             foreach ($_SESSION as $name => $value) {
                 $_SESSION[$name] = filter_var($_SESSION[$name]);
             }
         }
-
     }
 
     protected function after()
