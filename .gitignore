@@ -4,3 +4,4 @@
 /storage/cache/*/*
 /storage/temp/*/*
 vendor/
+composer.lock
