@@ -18,6 +18,7 @@ class Model
             $conn = new PDO("mysql:host=".$_ENV['DB_HOST'].";dbname=".$_ENV['DB_NAME'].";charset=utf8;port=".$_ENV['DB_PORT'].";", $_ENV['DB_USER'], $_ENV['DB_PASSWORD'],$options);
             // set the PDO error mode to exception
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             return $conn;
         } catch(PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
