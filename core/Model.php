@@ -6,46 +6,55 @@ use PDOException;
 
 class Model
 {
+    private static $connection = null;
+
     /**
      * Connect to database using PDO
      * Settings from dotenv are used to connect to database
-     * @return PDO
      */
-    protected function connect()
+    private static function connect():PDO
     {
-        try {
-            $options = [];
-            $conn = new PDO("mysql:host=".$_ENV['DB_HOST'].";dbname=".$_ENV['DB_NAME'].";charset=utf8;port=".$_ENV['DB_PORT'].";", $_ENV['DB_USER'], $_ENV['DB_PASSWORD'],$options);
-            // set the PDO error mode to exception
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            return $conn;
-        } catch(PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
+        if(empty(self::$connection)){
+            try {
+                $options = [];
+                self::$connection = new PDO("mysql:host=".$_ENV['DB_HOST'].";dbname=".$_ENV['DB_NAME'].";charset=utf8;port=".$_ENV['DB_PORT'].";", $_ENV['DB_USER'], $_ENV['DB_PASSWORD'],$options);
+                // set the PDO error mode to exception
+                self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                return self::$connection;
+            } catch(PDOException $e) {
+                echo "Connection failed";
+            }
+        }
+
+        return self::$connection;
+    }
+
+    /**
+     * execute a database query
+     */
+    public function dbQuery(string $pdo_prepared_query, array $pdo_field_variables):array
+    {
+        $pdo = $this::connect();
+        $stmt = $pdo->prepare($pdo_prepared_query);
+        $stmt->execute($pdo_field_variables);
+
+        //return query result when a select query is executed
+        if($this->getQueryType($pdo_prepared_query) == 'select'){
+            return $stmt->fetchAll();
+        }else{
+            return [];
         }
     }
 
     /**
-     * @param string $pdo_prepaired_query PDO prepared query
-     * @param array $pdo_field_variables PDO prepared query variables
-     * @return array
+     * Get query type
      */
-    public function dbQuery(string $pdo_prepaired_query, array $pdo_field_variables):array
+    public function getQueryType(string $query):string
     {
-        $pdo = $this->connect();
-        $stmt = $pdo->prepare($pdo_prepaired_query);
-        $stmt->execute($pdo_field_variables);
-
-        //if query is not a select no need to fetch the data
-        if(substr(strtolower($pdo_prepaired_query),0,6) != 'select'){
-            return true;
-        }else{
-            return $stmt->fetchAll();
-        }
+        $parts = explode(' ', $query);
+        return strtolower($parts[0]);
     }
-
-    
-
 }
 
 
