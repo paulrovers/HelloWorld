@@ -26,7 +26,6 @@ $router = new \core\Router();
 require('../app/Routes.php');
 require('../app/Redirects.php');
 
-$router->redirect($_SERVER['QUERY_STRING']);
 $router->dispatch($_SERVER['QUERY_STRING']);
 
 

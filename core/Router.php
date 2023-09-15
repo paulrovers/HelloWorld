@@ -4,49 +4,38 @@ namespace core;
 
 use app\controllers\error404;
 use Exception;
-use InvalidArgumentException;
 
 class Router
 {
     /**
      * Associative array of routes (the routing table)
-     * @var array
      */
     protected $routes = [];
 
     /**
      * Associative array of routes (the routing table)
-     * @var array
      */
     protected $redirectRoutes = [];
 
     /**
      * Parameters from the matched route
-     * @var array
      */
     protected $params = [];
 
     /**
      * Parameters from the matched route
-     * @var array
      */
     protected $newpath = [];
 
     /**
      * Parameters from the matched route
-     * @var array
      */
     protected $capturegroups = [];
 
     /**
      * Add a route to the routing table
-     *
-     * @param string $route  The route URL
-     * @param array  $params Parameters (controller, action, etc.)
-     *
-     * @return void
      */
-    public function add(string $route, array $params = [])
+    public function add(string $route, array $params = []):void
     {
         // Convert the route to a regular expression: escape forward slashes
         $route = preg_replace('/\//', '\\/', $route);
@@ -64,37 +53,9 @@ class Router
     }
 
     /**
-     * Add a route to the routing table
-     *
-     * @param string $route  The route URL
-     * @param string $newpath  The redirect path
-     *
-     * @return void
-     */
-    public function addRedirect(string $route, string $newpath)
-    {
-        // Convert the route to a regular expression: escape forward slashes
-        $route = preg_replace('/\//', '\\/', $route);
-
-        // Convert variables e.g. {controller}
-        $route = preg_replace('/\{([a-z0-9]+)\}/', '(?P<\1>[a-z-]+)', $route);
-
-        // Convert variables with custom regular expressions e.g. {id:\d+}
-        $route = preg_replace('/\{([a-z0-9]+):([^\}]+)\}/', '(?P<\1>\2)', $route);
-
-        // Add start and end delimiters, and case insensitive flag
-        $route = '/^' . $route . '$/i';
-
-        $this->redirectRoutes[$route] = $newpath;
-    }
-
-
-    /**
      * Get all the routes from the routing table
-     *
-     * @return array
      */
-    public function getRoutes()
+    public function getRoutes():array
     {
         return $this->routes;
     }
@@ -102,12 +63,8 @@ class Router
     /**
      * Match the route to the routes in the routing table, setting the $params
      * property if a route is found.
-     *
-     * @param string $url The route URL
-     *
-     * @return boolean  true if a match found, false otherwise
      */
-    public function match(string $url)
+    public function match(string $url):bool
     {
 
         foreach ($this->routes as $route => $params) {
@@ -129,49 +86,17 @@ class Router
     }
 
     /**
-     * Match the route to the redirectroutes in the routing table, setting the $newpath
-     * property if a route is found.
-     *
-     * @param string $url The route URL
-     *
-     * @return boolean  true if a match found, false otherwise
-     */
-
-    public function redirectMatch(string $url)
-    {
-        foreach ($this->redirectRoutes as $route => $newpath) {
-            if (preg_match($route, $url, $matches)) {
-                // Get named capture group values
-                foreach ($matches as $key => $match) {
-                    if (is_string($key)) {
-                        $this->capturegroups[$key] = $match;
-                    }
-                }
-                $this->newpath = $newpath;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    /**
      * Get the currently matched parameters
-     *
-     * @return array
      */
-    public function getParams()
+    public function getParams():array
     {
         return $this->params;
     }
 
     /**
      * search for capturegroups and place them in newpath if needed
-     *
-     * @return string
      */
-    public function addCapturegroups()
+    public function addCapturegroups():string
     {
         if(count($this->capturegroups) > 0){
             foreach($this->capturegroups as $key => $value){
@@ -184,7 +109,6 @@ class Router
     /**
      * Dispatch the route, creating the controller object and running the
      * action method
-     * @param string $url
      * @return error404|mixed
      * @throws Exception
      */
@@ -225,29 +149,9 @@ class Router
     }
 
     /**
-     * Redirect the route
-     *
-     * @param string $url The route URL
-     *
-     * @return void
+     * remove query string variables from url
      */
-    public function redirect(string $url)
-    {
-        $url = $this->removeQueryStringVariables($url);
-
-        if ($this->redirectMatch($url)) {
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: ".$_ENV['APP_URL'].$this->addCapturegroups());
-            exit;
-        }
-    }
-
-    /**
-     * @param string $url The full URL
-     *
-     * @return string The URL with the query string variables removed
-     */
-    protected function removeQueryStringVariables(string $url)
+    protected function removeQueryStringVariables(string $url):string
     {
         if ($url != '') {
             $parts = explode('&', $url, 2);
@@ -265,10 +169,8 @@ class Router
     /**
      * Get the namespace for the controller class. The namespace defined in the
      * route parameters is added if present.
-     *
-     * @return string The request URL
      */
-    protected function getNamespace()
+    protected function getNamespace():string
     {
         $namespace = 'app\controllers\\';
 
