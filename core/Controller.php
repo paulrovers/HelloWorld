@@ -21,11 +21,8 @@ abstract class Controller
      * Loading template
      * @param string $page template path and filename
      * @param array $vars template variables
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
      */
-    public function loadTemplate(string $page, array $vars)
+    public function loadTemplate(string $page, array $vars):void
     {
         //create twig subpage
         $this->template = $this->loader->load($page);
@@ -46,60 +43,24 @@ abstract class Controller
         ];
 
         echo $this->wrapper->render($this->template_vars);
-
     }
 
     /**
      * Load email template
-     * @param string $page
-     * @param array $vars
-     * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
      */
-    public function loadEmailTemplate(string $page, array $vars){
+    public function loadEmailTemplate(string $page, array $vars):string
+    {
         $this->template = $this->loader->load($page);
         return $this->template->render($vars);
     }
 
-    public function __destruct()
-    {
-    }
-
-    /**
-     * @param $name
-     * @param $args
-     * @throws \Exception
-     */
     public function __call(string $name, array $args)
     {
         $method = $name . 'Action';
         if (method_exists($this, $method)) {
-            if ($this->before() !== false) {
-                call_user_func_array([$this, $method], $args);
-                $this->after();
-            }
+            call_user_func_array([$this, $method], $args);
         } else {
             throw new \Exception("Method $method not found in controller " . get_class($this));
         }
     }
-
-    /**
-     * filter incoming data
-     */
-    protected function before()
-    {
-        if(isset($_SESSION)) {
-            foreach ($_SESSION as $name => $value) {
-                $_SESSION[$name] = filter_var($_SESSION[$name]);
-            }
-        }
-    }
-
-    protected function after()
-    {
-
-    }
-
 }
