@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Models\Users;
-use Core\Admin;
-use Core\Controller;
+use app\Models\Users;
+use core\Admin;
+use core\Controller;
 
 class Login extends Controller
 {

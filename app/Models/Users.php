@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace app\Models;
 
-use Core\Model;
+use core\Model;
 
 class Users extends Model
 {
@@ -19,8 +19,6 @@ class Users extends Model
         $query = "SELECT * FROM users WHERE email = :email LIMIT 1";
         $array = ['email' => $email];
         $result = $this->dbQuery($query,$array);
-
-        print_r($result[0]);
 
         if (count($result) == 1){
             echo 'koekoek';

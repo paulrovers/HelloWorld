@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers\Admin;
+namespace app\Controllers\Admin;
 
-class Secret extends \Core\Admin
+class Secret extends \core\Admin
 {
     public function indexAction()
     {

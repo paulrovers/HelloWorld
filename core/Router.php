@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace core;
 
 use App\Controllers\Error404;
 use Exception;
@@ -167,7 +167,7 @@ class Router
      */
     protected function getNamespace():string
     {
-        $namespace = 'App\Controllers\\';
+        $namespace = 'app\Controllers\\';
 
         if (array_key_exists('namespace', $this->params)) {
             $namespace .= $this->params['namespace'] . '\\';

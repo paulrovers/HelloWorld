@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace app\Controllers;
 
-use Core\Controller;
+use core\Controller;
 
 class Error404 extends Controller
 {

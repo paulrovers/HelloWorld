@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace core;
 
 class Admin extends Controller{
 

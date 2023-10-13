@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace core;
 
 abstract class Controller
 {
@@ -14,7 +14,7 @@ abstract class Controller
 
     public function __construct(array $route_params)
     {
-        $loader = new \Twig\Loader\FilesystemLoader("../App/Views/");
+        $loader = new \Twig\Loader\FilesystemLoader("../app/Views/");
         $this->route_params = $route_params;
         $this->loader = new \Twig\Environment($loader, [
             'cache' => false

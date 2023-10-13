@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Controllers;
+namespace app\Controllers;
 
-use Core\Controller;
+use core\Controller;
 
-class Home extends Controller
+class Contact extends Controller
 {
-    public $strTitle = 'Home';
+    public $strTitle = 'Contact';
     public $strDescription = 'Description';
     public $strPageurl = '';
-    public $h1Title = 'Home';
+    public $h1Title = 'Contact';
 
     public function indexAction()
     {
@@ -20,17 +20,12 @@ class Home extends Controller
         }
         $this->strPageurl = $_ENV['APP_URL'] . "/" . $page . "/";
 
-        //load default template variables
-        $array = [
-            'test' => 'test',
-            'testvar' => 'inhoud van testvar'
-        ];
-
+        $array = [];
         //load template based on name used
-        $this->loadTemplate('Home.twig', $array);
+        $this->loadTemplate('Contact.twig', $array);
     }
-
-
 }
+
+
 
 

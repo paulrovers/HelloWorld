@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers\Admin;
+namespace app\Controllers\Admin;
 
-class Home extends \Core\Admin
+class Home extends \core\Admin
 {
     public function indexAction()
     {
