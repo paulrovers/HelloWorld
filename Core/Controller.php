@@ -7,6 +7,10 @@ abstract class Controller
     protected $route_params = [];
     protected $wrapperfile = 'Wrapper.twig';
     protected $adminvars = [];
+    protected \Twig\Environment $loader;
+    protected \Twig\TemplateWrapper $template;
+    protected \Twig\TemplateWrapper $wrapper;
+    protected $template_vars = [];
 
     public function __construct(array $route_params)
     {
