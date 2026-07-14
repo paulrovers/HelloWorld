@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  launchd-daemon voor ddevdns (macOS). Poort 53 vereist root, dus dit is een
+  LaunchDaemon (niet een LaunchAgent).
+  Installatie:
+    sudo cp ddevdns /usr/local/bin/
+    sudo cp nl.paulrovers.ddevdns.plist /Library/LaunchDaemons/
+    sudo launchctl load -w /Library/LaunchDaemons/nl.paulrovers.ddevdns.plist
+-->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>nl.paulrovers.ddevdns</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/local/bin/ddevdns</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>StandardOutPath</key>
+	<string>/var/log/ddevdns.log</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/ddevdns.log</string>
+</dict>
+</plist>
